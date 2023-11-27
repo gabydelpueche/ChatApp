@@ -1,8 +1,10 @@
-// import { NavLink , useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import React, { useState } from 'react';
 
 export default function Signup(){
-    const [user, setUser] = useState({fname: '', email: '', username: '', password: ''});
+    // const [user, setUser] = useState({fname: '', email: '', username: '', password: ''});
+    const [user, setUser] = useState({username: ''});
+    const navigate = useNavigate();
 
     const detectChange = e => {
         setUser({...user, [e.target.name]:e.target.value});
@@ -25,7 +27,7 @@ export default function Signup(){
                 .then(data => console.log(data))
                 .catch(error => console.error('Error:', error));
 
-                // navigate('/login');
+                navigate('/');
         } catch(err){
             console.error(err);
         };
@@ -36,20 +38,20 @@ export default function Signup(){
         <form onSubmit={createUser}>
             <h1>Sign Up</h1>
             {/* Name */}
-            <label for='fname'>First Name:</label>
-            <input onChange={detectChange} type="text" id="fname" name="fname" />
+            {/* <label for='fname'>First Name:</label>
+            <input onChange={detectChange} type="text" id="fname" name="fname" /> */}
 
             {/* Email */}
-            <label for='email'>Email:</label>
-            <input onChange={detectChange} type="email" id="email" name="email" />
+            {/* <label for='email'>Email:</label>
+            <input onChange={detectChange} type="email" id="email" name="email" /> */}
 
             {/* Username */}
             <label for='username'>Create Username:</label>
             <input onChange={detectChange} type="text" id="username" name="username" />
 
             {/* Password */}
-            <label for='password'>Create Password:</label>
-            <input onChange={detectChange} type="password" id="password" name="password" />
+            {/* <label for='password'>Create Password:</label>
+            <input onChange={detectChange} type="password" id="password" name="password" /> */}
 
             {/* Submit */}
             <button type="submit">Create User</button>
