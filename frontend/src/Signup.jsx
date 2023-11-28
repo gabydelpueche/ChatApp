@@ -27,7 +27,7 @@ export default function Signup(){
                 .then(data => console.log(data))
                 .catch(error => console.error('Error:', error));
 
-                navigate('/');
+                navigate('/login');
         } catch(err){
             console.error(err);
         };

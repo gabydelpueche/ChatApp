@@ -8,6 +8,8 @@ const port =  process.env.PORT || 3000;
 const chatUserAuth = require('./models/chatUserAuth');
 const user = require('./models/chatUser')
 
+const WebSocket = require('ws');
+
 mongoose.connect(`mongodb+srv://gdelpu720:${process.env.MONGODB_PASSWORD}@cluster0.g7epr1c.mongodb.net/ChatApp`)
     .then( () => {
         console.log('Connected');
@@ -21,21 +23,29 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
 app.get('/getContacts', async (req, res) =>{
-    await user
-    .find()
-    .then(result => {
-        res.json(result)
-    })
-    .catch(err => console.error(err))
+    try{
+        await user
+        .find()
+        .then(result => {
+            res.json(result)
+        })
+        .catch(err => console.error(err))
+    } catch(error){
+        res.status(500).json({ message: 'Failed to load users', error: error.message });
+    }
 });
 
 app.get('/viewContact/:id', async (req, res) =>{
-    await user
-    .findOne({_id: req.params.id})
-    .then(contact => {
-        res.json(contact)
-    })
-    .catch(err => console.error(err))
+    try{
+        await user
+        .findOne({_id: req.params.id})
+        .then(contact => {
+            res.json(contact)
+        })
+        .catch(err => console.error(err))
+    } catch(error){
+        res.status(500).json({ message: 'Failed to load users', error: error.message });
+    }
 })
 
 app.post('/signup', async (req, res, next) => {
@@ -115,6 +125,8 @@ app.get('/login/:username', async (req, res) => {
     //     res.status(500).json({ message: 'Failed to login', error: error.message });
     // };
 })
+
+
 
 app.listen(port, () =>{
     console.log('listening')

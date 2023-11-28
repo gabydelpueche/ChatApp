@@ -1,53 +1,51 @@
 import { React, useState, useEffect } from "react"
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Home() {
+    const navigate = useNavigate()
     const [chatUsers, setChatUsers] = useState([{}])
-    const [user, setUser] = useState({username: ''})
+    const [selectedId, setSelectedId] = useState('')
 
     useEffect(() => {
         fetch('http://localhost:3000/getContacts')
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 setChatUsers(data)
             })
             .catch(err => console.error(err))
     }, []);
 
-    // const viewId = (e) => {
-    //     e.preventDefault();
-    //     setUser({id: e.target.id.value});
-    //     console.log(user);
-    // };
+    const userDetails = (userId) => {
+        setSelectedId(userId);
+        console.log(userId)
 
-    // useEffect(() => {
-    //     console.log("View changed");
-    //     fetch(`http://localhost:3000/viewContact/${user.id}`)
-    //         .then(res => res.json())
-    //         .then(data => console.log(data)
-    //         );
-    // }, [user])
+        fetch(`http://localhost:3000/viewContact/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                navigate(`/chat/${data._id}`)
+            })
+    };
 
     return (
         <>
             {/* Header */}
             <div>
-                <p>{user.username}</p>
-                <p>Create Room</p>
-                <p>Logout</p>
+                <button>Create Room</button>
+                <button>Logout</button>
             </div>
             {/* Side Nav */}
             <div>
                 <h1>Contacts</h1>
-                {chatUsers.map(chatUser => {
+                {chatUsers.map(chatUser => (
                     <>
-                        <form name="id">
-                            <input type="hidden" name="id" value={chatUser._id}/>
-                            <button type="submit">
+                        <div key={chatUser._id}>
+                            <button type="button" onClick={() => userDetails(chatUser._id)}>
                                 <p name='username' id="username">{chatUser.username}</p>
-                            </button> 
-                        </form>
+                            </button>
+                        </div>
                     </>
-                })}
+                ))}
             </div>
         </>
     );
